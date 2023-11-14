@@ -5,3 +5,9 @@ body{
     display: flex;
     justify-content: center;
 }
+
+.container{
+    width: 280px;
+    height: 600px;
+    background-color: #666;
+}
