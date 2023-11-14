@@ -50,6 +50,19 @@ const getHighScores = async () => {
     }
 }
 
+const getUserHighScores = async (id) => {
+    let conn;
+    try {
+        conn = await pool.getConnection()
+        const rows = await conn.query("SELECT * FROM scores WHERE user_id = ?", [id])
+        return rows
+    } catch (err) {
+        throw err
+    } finally {
+        if (conn) conn.end()
+    }
+}
+
 const addScore = async (user_id, score) => {
     let conn;
     try {
@@ -80,6 +93,7 @@ module.exports = {
     createUser,
     login,
     getHighScores,
+    getUserHighScores,
     addScore,
     deleteScores
 }

@@ -6,9 +6,9 @@ const signup = async (req, res) => {
     try {
         const { username, password } = req.body
         const user = await models.createUser(username, password)
-        res.status(200).json(user)
+        res.status(200).json({ message: "User Created", user_id: Number(user["insertId"]) })
     } catch (err) {
-        res.status(500).json({ message: "Something went wrong" })
+        res.status(500).json({ message: "Something went wrong", error: err.message })
     }
 }
 
@@ -36,22 +36,31 @@ const getHighScores = async (req, res) => {
     }
 }
 
-const addScore = async (req, res) => {
+const getUserHighScores = async (req, res) => {
     try {
-        const { user_id, score } = req.body
-        const newScore = await models.addScore(user_id, score)
-        res.status(200).json(newScore)
+        const highScores = await models.getUserHighScores(req.params.id)
+        res.status(200).json(highScores)
     } catch (err) {
         res.status(500).json({ message: "Something went wrong" })
     }
 }
 
+const addScore = async (req, res) => {
+    try {
+        const { user_id, score } = req.body
+        const newScore = await models.addScore(user_id, score)
+        res.status(200).json({ message: "Score Added", score_id: Number(newScore["insertId"]) })
+    } catch (err) {
+        res.status(500).json({ message: "Something went wrong", error: err.message })
+    }
+}
+
 const deleteScores = async (req, res) => {
     try {
-        const deletedScores = await models.deleteScores(req.user_id)
-        res.status(200).json(deletedScores)
+        const deletedScores = await models.deleteScores(req.params.id)
+        res.status(200).json({ message: "Scores Deleted", deletedScores: deletedScores["affectedRows"]})
     } catch (err) {
-        res.status(500).json({ message: "Something went wrong" })
+        res.status(500).json({ message: "Something went wrong", error: err.message })
     }
 }
 
@@ -59,6 +68,7 @@ module.exports = {
     signup,
     login,
     getHighScores,
+    getUserHighScores,
     addScore,
     deleteScores
 }
