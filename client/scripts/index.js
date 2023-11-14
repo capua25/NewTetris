@@ -7,6 +7,91 @@ const height = 30
 const board = new Array(height).fill(0).map(() => new Array(width).fill(0))
 
 let piece = 0
+const pieces = [
+    {
+        name: "I",
+        color: "cyan",
+        position: {
+            x: 5,
+            y: 0
+        },
+        shape: [
+            [1, 1, 1, 1]
+        ]
+    },
+    {
+        name: "J",
+        color: "blue",
+        position: {
+            x: 5,
+            y: 0
+        },
+        shape: [
+            [1, 0, 0],
+            [1, 1, 1]
+        ]
+    },
+    {
+        name: "L",
+        color: "orange",
+        position: {
+            x: 5,
+            y: 0
+        },
+        shape: [
+            [0, 0, 1],
+            [1, 1, 1]
+        ]
+    },
+    {
+        name: "O",
+        color: "yellow",
+        position: {
+            x: 5,
+            y: 0
+        },
+        shape: [
+            [1, 1],
+            [1, 1]
+        ]
+    },
+    {
+        name: "S",
+        color: "green",
+        position: {
+            x: 5,
+            y: 0
+        },
+        shape: [
+            [0, 1, 1],
+            [1, 1, 0]
+        ]
+    },
+    {
+        name: "T",
+        color: "purple",
+        position: {
+            x: 5,
+            y: 0
+        },
+        shape: [
+            [0, 1, 0],
+            [1, 1, 1]
+        ]
+    },
+    {
+        name: "Z",
+        color: "red",
+        position: {
+            x: 5,
+            y: 0
+        },
+        shape: [
+            [1, 1, 0],
+            [0, 1, 1]
+        ]
+    }
+]
 
 table.canvas.width = width * blockSize
 table.canvas.height = height * blockSize
