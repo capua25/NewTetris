@@ -13,7 +13,8 @@ CREATE TABLE `scores` (
 	`user_id` INT(11) NOT NULL,
 	`score` INT(11) NOT NULL,
 	PRIMARY KEY (`id`) USING BTREE,
-	INDEX `user_id` (`user_id`) USING BTREE
+	INDEX `user_id` (`user_id`) USING BTREE,
+	CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 COLLATE='latin1_swedish_ci'
 ENGINE=InnoDB
