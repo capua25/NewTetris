@@ -1,5 +1,31 @@
 //Login Check--------------------------------------------------------------------------------------------------------------------------
+const user = localStorage.getItem('user')
+const token = localStorage.getItem('token')
+const loginModal = document.querySelector('.login_modal')
+const alertModal = document.querySelector('.alert_modal')
+const alertButton = document.querySelector('#alert_button')
+const gameDiv = document.querySelector('.border_div')
+const form = document.querySelector('form')
 
+form.addEventListener('submit', event => {
+    event.preventDefault()
+    const username = document.getElementById('username').value
+    const password = document.getElementById('password').value
+    if (!(username && password)) {
+        alertModal.classList.add('modal_show')
+    }
+})
+
+alertButton.addEventListener('click', () => {
+    alertModal.classList.remove('modal_show')
+})
+
+if (!user || !token) {
+    gameDiv.classList.add('hide')
+    localStorage.removeItem('user')
+    localStorage.removeItem('token')
+    loginModal.classList.add('modal_show')
+}
 
 //Buttons------------------------------------------------------------------------------------------------------------------------------
 const startBtn = document.getElementById("start-button")
@@ -16,6 +42,7 @@ startBtn.addEventListener("click", () => {
     if (!gameStarted) {
         startBtn.disabled = true
         pauseBtn.disabled = false
+        restartBtn.disabled = false
         gameStarted = true
         updateTable()
         drawFuturePiece()
@@ -27,7 +54,6 @@ pauseBtn.addEventListener("click", () => {
     gameStarted = false
 })
 restartBtn.addEventListener("click", () => {
-    restartBtn.disabled = true
     startBtn.disabled = true
     pauseBtn.disabled = false
     gameStarted = true
@@ -88,10 +114,7 @@ const pieces = [
     {
         name: "I",
         color: "#0f85ea",
-        position: {
-            x: 5,
-            y: 0
-        },
+        position: { x: 5, y: 0 },
         shape: [
             [1, 1, 1, 1]
         ]
@@ -99,10 +122,7 @@ const pieces = [
     {
         name: "J",
         color: "#1db3c8",
-        position: {
-            x: 5,
-            y: 0
-        },
+        position: { x: 5, y: 0 },
         shape: [
             [1, 0, 0],
             [1, 1, 1]
@@ -111,10 +131,7 @@ const pieces = [
     {
         name: "L",
         color: "#fb3e00",
-        position: {
-            x: 5,
-            y: 0
-        },
+        position: { x: 5, y: 0 },
         shape: [
             [0, 0, 1],
             [1, 1, 1]
@@ -122,11 +139,8 @@ const pieces = [
     },
     {
         name: "O",
-        color: "#d12a60",
-        position: {
-            x: 5,
-            y: 0
-        },
+        color: "#eaedee",
+        position: { x: 5, y: 0 },
         shape: [
             [1, 1],
             [1, 1]
@@ -134,11 +148,8 @@ const pieces = [
     },
     {
         name: "S",
-        color: "#ab47bb",
-        position: {
-            x: 5,
-            y: 0
-        },
+        color: "#d12a60",
+        position: { x: 5, y: 0 },
         shape: [
             [0, 1, 1],
             [1, 1, 0]
@@ -147,10 +158,7 @@ const pieces = [
     {
         name: "T",
         color: "#ffe703",
-        position: {
-            x: 5,
-            y: 0
-        },
+        position: { x: 5, y: 0 },
         shape: [
             [0, 1, 0],
             [1, 1, 1]
@@ -158,11 +166,8 @@ const pieces = [
     },
     {
         name: "Z",
-        color: "#eaedee",
-        position: {
-            x: 5,
-            y: 0
-        },
+        color: "#ab47bb",
+        position: { x: 5, y: 0 },
         shape: [
             [1, 1, 0],
             [0, 1, 1]
@@ -176,7 +181,7 @@ table.canvas.width = width * blockSize
 table.canvas.height = height * blockSize
 table.scale(blockSize, blockSize)
 nextCanva.canvas.width = 4 * blockSize
-nextCanva.canvas.height = 4 * blockSize
+nextCanva.canvas.height = 2 * blockSize
 nextCanva.scale(blockSize, blockSize)
 drawTable()
 
@@ -235,7 +240,7 @@ function drawTable() {
 }
 
 function drawFuturePiece() {
-    nextCanva.fillStyle = "#888"
+    nextCanva.fillStyle = "#888888"
     nextCanva.fillRect(0, 0, 4, 2)
 
     pieces[futurePiece].shape.forEach((row, y) => {
@@ -283,7 +288,7 @@ function removeLine() {
         }
     })
     if (erasedLines > nextLevel) {
-        dropInterval =  dropInterval * 0.8
+        dropInterval = dropInterval * 0.8
         nextLevel += 10
         playerLevel++
         level.innerText = playerLevel
@@ -335,7 +340,7 @@ document.addEventListener("keydown", event => {
     if (event.key === 'Escape') {
         gameStarted = false
     }
-    if (gameStarted){
+    if (gameStarted) {
         if (event.key === 'ArrowLeft' || event.key === 'a') {
             pieces[piece].position.x--
             if (checkCollision()) {

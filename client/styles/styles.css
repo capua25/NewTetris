@@ -2,6 +2,15 @@
     --angle: 0deg;
 }
 
+@font-face {
+    font-family: Tetris;
+    src: url(../resources/ARCADE_N.TTF);
+}
+@font-face {
+    font-family: Tetris2;
+    src: url(../resources/Pixelmania.ttf);
+}
+
 body{
     width: 100vw;
     height: 100vh;
@@ -10,7 +19,8 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url(../resources/background2.jpg);
+    background-image: url(../resources/background.jpg);
+    font-family: Tetris;
 }
 
 .border_div{
@@ -52,12 +62,11 @@ body{
 .container{
     width: 250px;
     height: 750px;
-    background-color: #888;
+    background-color: #888888CC;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    font-family: Helvetica, sans-serif;
 }
 
 .container button{
@@ -67,8 +76,8 @@ body{
     border-radius: 10px;
     border: none;
     background-color: #ccc;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 15px;
+    font-family: Tetris2;
     cursor: pointer;
 }
 
@@ -78,6 +87,17 @@ body{
 
 .right{
     border-radius: 0 20px 20px 0;
+}
+
+.info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#next{
+    border: solid 2px #000;
 }
 
 .modal_container{
@@ -104,6 +124,85 @@ body{
     align-items: center;
 }
 
+.hide{
+    visibility: hidden;
+}
+
+.border_login{
+    width: 410px;
+    height: 410px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(var(--angle), rgba(255,0,0,0.5) 0%, rgba(254,255,0,0.5) 33%, rgba(32,250,31,0.5) 66%, rgba(0,212,255,0.5) 100%);
+    border-radius: 25px;
+    animation: spin 5s linear infinite;
+}
+
+.login_container{
+    height: 400px;
+    width: 400px;
+    border-radius: 20px;
+}
+
+.login_modal{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.555);
+    visibility: hidden;
+}
+
+.alert_modal{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.555);
+    visibility: hidden;
+}
+
 .modal_show{
     visibility: visible;
+}
+
+form input{
+    width: 300px;
+    height: 30px;
+    margin: 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 20px;
+}
+
+#submit{
+    width: 120px;
+    height: 40px;
+    margin: 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 12px;
+    font-family: Tetris2;
+    cursor: pointer;
+}
+
+#start-button:hover{
+    background-color: rgba(119, 245, 16, 0.473);
+}
+#pause-button:hover{
+    background-color: rgba(222, 245, 16, 0.55);
+}
+#reset-button:hover{
+    background-color: rgba(245, 16, 16, 0.473);
+}
+
+form{
+    background-color: transparent !important;
 }

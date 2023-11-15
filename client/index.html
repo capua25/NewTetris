@@ -10,31 +10,49 @@
     <div class="border_div">
         <div class="game">
             <div class="container left">
-                <h1>Tetris</h1>
-                <button id="start-button">Start</button>
-                <button id="pause-button">Pause</button>
-                <button id="reset-button">Reset</button>
+                <h1>TETRIS</h1>
+                <h2>User</h2>
+                <div id="user"></div>
+                <button id="start-button">START</button>
+                <button id="pause-button">PAUSE</button>
+                <button id="reset-button">RESET</button>
             </div>
             <div class="tetris">
                 <canvas id="tetris"></canvas>
             </div>
             <div class="container right">
-                <div class="next">
-                    <h1>Next</h1>
+                <div class="next info">
+                    <h2>Next</h2>
                     <canvas id="next"></canvas>
                 </div>
-                <div class="score">
-                    <h1>Score</h1>
+                <div class="score info">
+                    <h2>Score</h2>
                     <div id="score">0</div>
                 </div>
-                <div class="level">
-                    <h1>Level</h1>
+                <div class="level info">
+                    <h2>Level</h2>
                     <div id="level">0</div>
                 </div>
-                <div class="lines">
-                    <h1>Lines</h1>
+                <div class="lines info">
+                    <h2>Lines</h2>
                     <div id="lines">0</div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="login_modal">
+        <div class="border_login">
+            <div class="container login_container">
+                <h1>Tetris Game</h1>
+                <h2>Login</h2>
+                <form class="container" action="#">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" placeholder="Enter your username">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="Enter your password">
+                    <input id="submit" type="submit" value="LOGIN">
+                </form>
             </div>
         </div>
     </div>
@@ -49,7 +67,16 @@
         </div>
     </section>
 
-    <script src="scripts/init.js"></script>
+    <div class="alert_modal">
+        <div class="alert">
+            <div class="alert_container">
+                <h1 class="alert_h1">Alert</h1>
+                <h2 class="alert_h2"></h2>
+                <button id="alert_button">GOT IT</button>
+            </div>
+        </div>
+    </div>
+
     <script src="scripts/index.js"></script>
 </body>
 </html>
