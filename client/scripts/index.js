@@ -320,6 +320,7 @@ document.addEventListener("keydown", event => {
         if (event.key === 'ArrowUp' || event.key === 'w') {
             rotatePiece()
             if (checkCollision()) {
+                //NO ANDA
                 for (let i = 0; i < 3; i++) {
                     pieces[piece].position.x++
                     if (checkCollision()) {
