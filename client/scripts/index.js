@@ -235,8 +235,8 @@ function drawTable() {
 }
 
 function drawFuturePiece() {
-    nextCanva.fillStyle = "black"
-    nextCanva.fillRect(0, 0, 4, 4)
+    nextCanva.fillStyle = "#888"
+    nextCanva.fillRect(0, 0, 4, 2)
 
     pieces[futurePiece].shape.forEach((row, y) => {
         row.forEach((value, x) => {
