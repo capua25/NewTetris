@@ -1,3 +1,7 @@
+:root{
+    --angle: 0deg;
+}
+
 body{
     width: 100vw;
     height: 100vh;
@@ -6,42 +10,57 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    background-image: url(../resources/background2.jpg);
 }
 
 .border_div{
-    width: 900px;
-    height: 650px;
+    width: 860px;
+    height: 760px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(0deg, rgba(255,0,0,1) 0%, rgba(254,255,0,1) 33%, rgba(32,250,31,1) 66%, rgba(0,212,255,1) 100%);
+    background: linear-gradient(var(--angle), rgba(255,0,0,0.5) 0%, rgba(254,255,0,0.5) 33%, rgba(32,250,31,0.5) 66%, rgba(0,212,255,0.5) 100%);
     border-radius: 25px;
+    animation: spin 5s linear infinite;
+}
+
+@keyframes spin{
+    0%{--angle: 0deg;}
+    10%{--angle: 36deg;}
+    20%{--angle: 72deg;}
+    30%{--angle: 108deg;}
+    40%{--angle: 144deg;}
+    50%{--angle: 180deg;}
+    60%{--angle: 216deg;}
+    70%{--angle: 252deg;}
+    80%{--angle: 288deg;}
+    90%{--angle: 324deg;}
+    100%{--angle: 360deg;}
 }
 
 .game{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 25px;
+    margin: 10px;
 }
 
 .tetris{
-    height: 600px;
+    height: 750px;
 }
 
 .container{
-    width: 280px;
-    height: 600px;
+    width: 250px;
+    height: 750px;
     background-color: #666;
 }
 
 .left{
-    border-radius: 15px 0 0 15px;
+    border-radius: 20px 0 0 20px;
 }
 
 .right{
-    border-radius: 0 15px 15px 0;
-
+    border-radius: 0 20px 20px 0;
 }
 
 .modal_container{

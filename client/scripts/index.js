@@ -1,3 +1,7 @@
+//Login Check--------------------------------------------------------------------------------------------------------------------------
+
+
+//Buttons------------------------------------------------------------------------------------------------------------------------------
 const startBtn = document.getElementById("start-button")
 const pauseBtn = document.getElementById("pause-button")
 const restartBtn = document.getElementById("reset-button")
@@ -65,6 +69,7 @@ restartGame.addEventListener("click", () => {
 saveScore.addEventListener("click", () => {
 
 })
+
 //Tetris------------------------------------------------------------------------------------------------------------------------------
 let canva = document.getElementById("tetris")
 let canva2 = document.getElementById("next")
@@ -74,7 +79,7 @@ let nextCanva = canva2.getContext("2d")
 let playerScore = 0
 let playerLevel = 1
 
-const blockSize = 20
+const blockSize = 25
 const width = 14
 const height = 30
 const board = new Array(height).fill(0).map(() => new Array(width).fill(0))
@@ -82,7 +87,7 @@ const board = new Array(height).fill(0).map(() => new Array(width).fill(0))
 const pieces = [
     {
         name: "I",
-        color: "#9cfffa",
+        color: "#0f85ea",
         position: {
             x: 5,
             y: 0
@@ -93,7 +98,7 @@ const pieces = [
     },
     {
         name: "J",
-        color: "#acf39d",
+        color: "#1db3c8",
         position: {
             x: 5,
             y: 0
@@ -105,7 +110,7 @@ const pieces = [
     },
     {
         name: "L",
-        color: "#ca2e55",
+        color: "#fb3e00",
         position: {
             x: 5,
             y: 0
@@ -117,7 +122,7 @@ const pieces = [
     },
     {
         name: "O",
-        color: "#f5b841",
+        color: "#d12a60",
         position: {
             x: 5,
             y: 0
@@ -129,7 +134,7 @@ const pieces = [
     },
     {
         name: "S",
-        color: "#388659",
+        color: "#ab47bb",
         position: {
             x: 5,
             y: 0
@@ -141,7 +146,7 @@ const pieces = [
     },
     {
         name: "T",
-        color: "#c490d1",
+        color: "#ffe703",
         position: {
             x: 5,
             y: 0
@@ -153,7 +158,7 @@ const pieces = [
     },
     {
         name: "Z",
-        color: "#fb8b24",
+        color: "#eaedee",
         position: {
             x: 5,
             y: 0
