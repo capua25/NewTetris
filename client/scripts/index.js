@@ -5,25 +5,66 @@ const score = document.getElementById("score")
 const level = document.getElementById("level")
 const lines = document.getElementById("lines")
 
+pauseBtn.disabled = true
+restartBtn.disabled = true
+
 startBtn.addEventListener("click", () => {
     if (!gameStarted) {
+        startBtn.disabled = true
+        pauseBtn.disabled = false
         gameStarted = true
         updateTable()
         drawFuturePiece()
     }
 })
 pauseBtn.addEventListener("click", () => {
+    startBtn.disabled = false
+    pauseBtn.disabled = true
     gameStarted = false
 })
 restartBtn.addEventListener("click", () => {
+    restartBtn.disabled = true
+    startBtn.disabled = true
+    pauseBtn.disabled = false
     gameStarted = true
+    playerLevel = 1
+    playerScore = 0
+    erasedLines = 0
+    nextLevel = 10
+    dropInterval = 1000
+    score.innerText = playerScore
+    level.innerText = playerLevel
+    lines.innerText = erasedLines
     board.forEach((row) => {
         row.fill(0)
     })
     nextPiece()
     updateTable()
+    drawFuturePiece()
 })
 
+//Modal------------------------------------------------------------------------------------------------------------------------------
+const modal = document.querySelector(".modal_container")
+const saveScore = document.getElementById("save_score")
+const restartGame = document.getElementById("restart_button")
+const modalScore = document.getElementById("score_modal")
+
+const openModal = () => {
+    modalScore.innerText = playerScore
+    modal.classList.add("modal_show")
+}
+const closeModal = () => {
+    modal.classList.remove("modal_show")
+}
+
+restartGame.addEventListener("click", () => {
+    closeModal()
+    restartBtn.click()
+})
+
+saveScore.addEventListener("click", () => {
+
+})
 //Tetris------------------------------------------------------------------------------------------------------------------------------
 let canva = document.getElementById("tetris")
 let canva2 = document.getElementById("next")
@@ -41,7 +82,7 @@ const board = new Array(height).fill(0).map(() => new Array(width).fill(0))
 const pieces = [
     {
         name: "I",
-        color: "cyan",
+        color: "#9cfffa",
         position: {
             x: 5,
             y: 0
@@ -52,7 +93,7 @@ const pieces = [
     },
     {
         name: "J",
-        color: "blue",
+        color: "#acf39d",
         position: {
             x: 5,
             y: 0
@@ -64,7 +105,7 @@ const pieces = [
     },
     {
         name: "L",
-        color: "orange",
+        color: "#ca2e55",
         position: {
             x: 5,
             y: 0
@@ -76,7 +117,7 @@ const pieces = [
     },
     {
         name: "O",
-        color: "yellow",
+        color: "#f5b841",
         position: {
             x: 5,
             y: 0
@@ -88,7 +129,7 @@ const pieces = [
     },
     {
         name: "S",
-        color: "green",
+        color: "#388659",
         position: {
             x: 5,
             y: 0
@@ -100,7 +141,7 @@ const pieces = [
     },
     {
         name: "T",
-        color: "purple",
+        color: "#c490d1",
         position: {
             x: 5,
             y: 0
@@ -112,7 +153,7 @@ const pieces = [
     },
     {
         name: "Z",
-        color: "red",
+        color: "#fb8b24",
         position: {
             x: 5,
             y: 0
@@ -132,6 +173,7 @@ table.scale(blockSize, blockSize)
 nextCanva.canvas.width = 4 * blockSize
 nextCanva.canvas.height = 4 * blockSize
 nextCanva.scale(blockSize, blockSize)
+drawTable()
 
 let erasedLines = 0
 let nextLevel = 10
@@ -155,8 +197,8 @@ function updateTable(time = 0) {
                 merge()
             }
             dropCounter = 0
-            playerLevel++
-            level.innerText = playerLevel
+            playerScore++
+            score.innerText = playerScore
         }
 
         drawTable()
@@ -255,11 +297,10 @@ function nextPiece() {
     pieces[piece].position.x = 5
     pieces[piece].position.y = 0
     if (checkCollision()) {
-        alert("Game Over")
+        restartBtn.disabled = false
+        pauseBtn.disabled = true
         gameStarted = false
-        board.forEach((row, y) => {
-            row.fill(0)
-        })
+        openModal()
     }
 }
 
@@ -308,6 +349,7 @@ document.addEventListener("keydown", event => {
             }
         }
         if (event.key === ' ') {
+            console.log(gameStarted)
             for (let i = 0; i < 30; i++) {
                 pieces[piece].position.y++
                 if (checkCollision()) {
@@ -320,7 +362,7 @@ document.addEventListener("keydown", event => {
         if (event.key === 'ArrowUp' || event.key === 'w') {
             rotatePiece()
             if (checkCollision()) {
-                //NO ANDA
+                //NO ANDA------------------------------------------------------------------------------------------------------------------------------
                 for (let i = 0; i < 3; i++) {
                     pieces[piece].position.x++
                     if (checkCollision()) {

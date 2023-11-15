@@ -8,20 +8,40 @@ body{
     align-items: center;
 }
 
+.border_div{
+    width: 900px;
+    height: 650px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(0deg, rgba(255,0,0,1) 0%, rgba(254,255,0,1) 33%, rgba(32,250,31,1) 66%, rgba(0,212,255,1) 100%);
+    border-radius: 25px;
+}
+
 .game{
     display: flex;
     justify-content: center;
     align-items: center;
-    border-image: linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(254,255,0,1) 33%, rgba(32,250,31,1) 66%, rgba(0,212,255,1) 100%);
-    border-width: 5px;
-    border-style: solid;
-    border-radius: 20px;
+    margin: 25px;
+}
+
+.tetris{
+    height: 600px;
 }
 
 .container{
     width: 280px;
     height: 600px;
     background-color: #666;
+}
+
+.left{
+    border-radius: 15px 0 0 15px;
+}
+
+.right{
+    border-radius: 0 15px 15px 0;
+
 }
 
 .modal_container{

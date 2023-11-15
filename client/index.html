@@ -7,32 +7,34 @@
     <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
-    <div class="game">
-        <div class="container">
-            <h1>Tetris</h1>
-            <button id="start-button">Start</button>
-            <button id="pause-button">Pause</button>
-            <button id="reset-button">Reset</button>
-        </div>
-        <div class="">
-            <canvas id="tetris"></canvas>
-        </div>
-        <div class="container">
-            <div class="score">
-                <h1>Score</h1>
-                <div id="score">0</div>
+    <div class="border_div">
+        <div class="game">
+            <div class="container left">
+                <h1>Tetris</h1>
+                <button id="start-button">Start</button>
+                <button id="pause-button">Pause</button>
+                <button id="reset-button">Reset</button>
             </div>
-            <div class="level">
-                <h1>Level</h1>
-                <div id="level">0</div>
+            <div class="tetris">
+                <canvas id="tetris"></canvas>
             </div>
-            <div class="lines">
-                <h1>Lines</h1>
-                <div id="lines">0</div>
-            </div>
-            <div class="next">
-                <h1>Next</h1>
-                <canvas id="next"></canvas>
+            <div class="container right">
+                <div class="score">
+                    <h1>Score</h1>
+                    <div id="score">0</div>
+                </div>
+                <div class="level">
+                    <h1>Level</h1>
+                    <div id="level">0</div>
+                </div>
+                <div class="lines">
+                    <h1>Lines</h1>
+                    <div id="lines">0</div>
+                </div>
+                <div class="next">
+                    <h1>Next</h1>
+                    <canvas id="next"></canvas>
+                </div>
             </div>
         </div>
     </div>
