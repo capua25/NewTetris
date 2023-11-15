@@ -3,22 +3,77 @@ const user = localStorage.getItem('user')
 const token = localStorage.getItem('token')
 const loginModal = document.querySelector('.login_modal')
 const alertModal = document.querySelector('.alert_modal')
+const alertText = document.querySelector('.alert_h2')
 const alertButton = document.querySelector('#alert_button')
 const gameDiv = document.querySelector('.border_div')
 const form = document.querySelector('form')
+
+alertButton.addEventListener('click', () => {
+    alertModal.classList.remove('modal_show')
+})
 
 form.addEventListener('submit', event => {
     event.preventDefault()
     const username = document.getElementById('username').value
     const password = document.getElementById('password').value
-    if (!(username && password)) {
+    if (!username && !password) {
+        alertText.innerText = 'Please complete all the fields'
         alertModal.classList.add('modal_show')
+    }else if (!username) {
+        alertText.innerText = 'Please complete the username field'
+        alertModal.classList.add('modal_show')
+    }else if(!password){
+        alertText.innerText = 'Please complete the password field'
+        alertModal.classList.add('modal_show')
+    }else if(username.length < 6){
+        alertText.innerText = 'Username must be at least 6 characters long'
+        alertModal.classList.add('modal_show')
+    }else if (password.length < 6){
+        alertText.innerText = 'Password must be at least 6 characters long'
+        alertModal.classList.add('modal_show')
+    }else{
+
     }
 })
 
-alertButton.addEventListener('click', () => {
-    alertModal.classList.remove('modal_show')
-})
+async function serverLogin(username, password){
+    try{
+        const res = await fetch('http://localhost:3060/login', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: {
+                'username': username,
+                'password': password
+            }
+        })
+        const data = await res.json()
+    }catch(error){
+        console.log(error)
+        alertText.innerText = 'Error, please try again'
+        alertModal.classList.add('modal_show')
+    }
+}
+async function serverSignup(username, password){
+    try{
+        const res = await fetch('http://localhost:3060/signup', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: {
+                'username': username,
+                'password': password
+            }
+        })
+        const data = await res.json()
+    }catch(error){
+        console.log(error)
+        alertText.innerText = 'Error, please try again'
+        alertModal.classList.add('modal_show')
+    }
+}
 
 if (!user || !token) {
     gameDiv.classList.add('hide')
