@@ -1,11 +1,16 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Login Check--------------------------------------------------------------------------------------------------------------------------
 const user = localStorage.getItem('user')
+const user_id = localStorage.getItem('user_id')
 const token = localStorage.getItem('token')
 const loginModal = document.querySelector('.login_modal')
 const alertModal = document.querySelector('.alert_modal')
+const alertTitle = document.querySelector('.alert_h1')
 const alertText = document.querySelector('.alert_h2')
 const alertButton = document.querySelector('#alert_button')
+const newUserButton = document.querySelector('#create_user')
 const gameDiv = document.querySelector('.border_div')
+const userDiv = document.querySelector('#user')
 const form = document.querySelector('form')
 
 alertButton.addEventListener('click', () => {
@@ -18,21 +23,26 @@ form.addEventListener('submit', event => {
     const password = document.getElementById('password').value
     if (!username && !password) {
         alertText.innerText = 'Please complete all the fields'
+        alertTitle.innerText = 'Alert!'
         alertModal.classList.add('modal_show')
     }else if (!username) {
         alertText.innerText = 'Please complete the username field'
+        alertTitle.innerText = 'Alert!'
         alertModal.classList.add('modal_show')
     }else if(!password){
         alertText.innerText = 'Please complete the password field'
+        alertTitle.innerText = 'Alert!'
         alertModal.classList.add('modal_show')
     }else if(username.length < 6){
         alertText.innerText = 'Username must be at least 6 characters long'
+        alertTitle.innerText = 'Alert!'
         alertModal.classList.add('modal_show')
     }else if (password.length < 6){
         alertText.innerText = 'Password must be at least 6 characters long'
+        alertTitle.innerText = 'Alert!'
         alertModal.classList.add('modal_show')
     }else{
-
+        serverLogin(username, password)
     }
 })
 
@@ -42,6 +52,7 @@ async function serverLogin(username, password){
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
+                'mode': 'no-cors'
             },
             body: {
                 'username': username,
@@ -49,9 +60,21 @@ async function serverLogin(username, password){
             }
         })
         const data = await res.json()
+        if (data.token){
+            localStorage.setItem('user', data.user.username)
+            localStorage.setItem('user_id', data.user.id)
+            localStorage.setItem('token', data.token)
+            loginModal.classList.remove('modal_show')
+            userDiv.innerText = data.user.username
+            gameDiv.classList.remove('hide')
+        }else{
+            newUserButton.classList.remove('hide')
+            throw new Error('Invalid credentials, create new user?')
+        }
     }catch(error){
         console.log(error)
-        alertText.innerText = 'Error, please try again'
+        alertTitle.innerText = 'Alert!'
+        alertText.innerText = error.message
         alertModal.classList.add('modal_show')
     }
 }
@@ -61,6 +84,7 @@ async function serverSignup(username, password){
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
+                'mode': 'no-cors'
             },
             body: {
                 'username': username,
@@ -68,20 +92,37 @@ async function serverSignup(username, password){
             }
         })
         const data = await res.json()
+        if (data.message === 'User created'){
+            newUserButton.classList.add('hide')
+            serverLogin(username, password)
+        }else{
+            newUserButton.classList.remove('hide')
+            throw new Error('Error, username must be unique')
+        }
     }catch(error){
         console.log(error)
-        alertText.innerText = 'Error, please try again'
+        alertTitle.innerText = 'Alert!'
+        alertText.innerText = error.message
         alertModal.classList.add('modal_show')
     }
 }
 
+newUserButton.addEventListener('click', () => {
+    newUserButton.classList.add('hide')
+    serverSignup(document.getElementById('username').value, document.getElementById('password').value)
+})
+
 if (!user || !token) {
     gameDiv.classList.add('hide')
     localStorage.removeItem('user')
+    localStorage.removeItem('user_id')
     localStorage.removeItem('token')
     loginModal.classList.add('modal_show')
+}else{
+    gameDiv.classList.remove('hide')
+    userDiv.innerText = user
 }
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Buttons------------------------------------------------------------------------------------------------------------------------------
 const startBtn = document.getElementById("start-button")
 const pauseBtn = document.getElementById("pause-button")
@@ -127,7 +168,7 @@ restartBtn.addEventListener("click", () => {
     updateTable()
     drawFuturePiece()
 })
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Modal------------------------------------------------------------------------------------------------------------------------------
 const modal = document.querySelector(".modal_container")
 const saveScore = document.getElementById("save_score")
@@ -150,7 +191,7 @@ restartGame.addEventListener("click", () => {
 saveScore.addEventListener("click", () => {
 
 })
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Tetris------------------------------------------------------------------------------------------------------------------------------
 let canva = document.getElementById("tetris")
 let canva2 = document.getElementById("next")
@@ -457,3 +498,4 @@ document.addEventListener("keydown", event => {
         }
     }
 })
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
