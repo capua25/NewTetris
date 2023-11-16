@@ -54,10 +54,10 @@ async function serverLogin(username, password){
                 'Content-Type': 'application/json',
                 'mode': 'no-cors'
             },
-            body: {
+            body: JSON.stringify({
                 'username': username,
                 'password': password
-            }
+            })
         })
         const data = await res.json()
         if (data.token){
@@ -72,7 +72,7 @@ async function serverLogin(username, password){
             throw new Error('Invalid credentials, create new user?')
         }
     }catch(error){
-        console.log(error)
+        //console.log(error)
         alertTitle.innerText = 'Alert!'
         alertText.innerText = error.message
         alertModal.classList.add('modal_show')

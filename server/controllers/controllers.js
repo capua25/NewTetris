@@ -17,12 +17,14 @@ const login = async (req, res) => {
         const { username, password } = req.body
         const user = await models.login(username, password)
         if (user) {
+            console.log('entra al if')
             const token = jwt.sign({ id: user.id }, JWT_SECRET)
             res.status(200).json({ token, user })
         } else {
             res.status(401).json({ message: "Invalid Credentials" })
         }
     } catch (err) {
+        console.log('error login', err)
         res.status(500).json({ message: "Something went wrong", error: err.message })
     }
 }
