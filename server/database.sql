@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Versión del servidor:         10.11.5-MariaDB - mariadb.org binary distribution
+-- Versión del servidor:         11.3.0-MariaDB - mariadb.org binary distribution
 -- SO del servidor:              Win64
 -- HeidiSQL Versión:             12.3.0.6589
 -- --------------------------------------------------------
@@ -22,21 +22,25 @@ USE `tetris`;
 -- Volcando estructura para tabla tetris.scores
 CREATE TABLE IF NOT EXISTS `scores` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `user_id` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
   `score` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `FK_scores_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  KEY `FK_scores_users` (`user_id`),
+  CONSTRAINT `FK_scores_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`username`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- La exportación de datos fue deseleccionada.
 
 -- Volcando estructura para tabla tetris.users
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `username` varchar(50) NOT NULL DEFAULT '',
+  `password` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+
+-- La exportación de datos fue deseleccionada.
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
