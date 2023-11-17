@@ -67,6 +67,7 @@ async function serverLogin(username, password){
             localStorage.setItem('user_id', data.user.id)
             localStorage.setItem('token', data.token)
             loginModal.classList.remove('modal_show')
+            refreshScores()
             userDiv.innerText = data.user.username
             gameDiv.classList.remove('hide')
         }else{
@@ -120,8 +121,9 @@ if (user === null || token === null || user_id === null) {
     localStorage.removeItem('token')
     loginModal.classList.add('modal_show')
 }else{
-    gameDiv.classList.remove('hide')
     userDiv.innerText = user
+    refreshScores()
+    gameDiv.classList.remove('hide')
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Buttons------------------------------------------------------------------------------------------------------------------------------
@@ -153,6 +155,7 @@ pauseBtn.addEventListener("click", () => {
 restartBtn.addEventListener("click", () => {
     startBtn.disabled = true
     pauseBtn.disabled = false
+    restartBtn.disabled = true
     gameStarted = true
     playerLevel = 1
     playerScore = 0
@@ -169,6 +172,101 @@ restartBtn.addEventListener("click", () => {
     updateTable()
     drawFuturePiece()
 })
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Scores Tables----------------------------------------------------------------------------------------------------------------------
+const highScoresTable = document.querySelector('#bestScores ul')
+const userScoresTable = document.querySelector('#userScores ul')
+const deleteScoresBtn = document.querySelector('#delete-scores')
+
+async function getHighScores() {
+    try {
+        const token = localStorage.getItem('token')
+        const res = await fetch('http://localhost:3060/scores', {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'auth': token
+            }
+        })
+        const data = await res.json()
+        if (data.length > 0) {
+            highScoresTable.innerHTML = ''
+            data.forEach(score => {
+                const li = document.createElement('li')
+                li.innerText = `${score.username}- ${score.score}`
+                highScoresTable.appendChild(li)
+            })
+        } else {
+            throw new Error('No scores found')
+        }
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+async function getUserScores() {
+    try {
+        const token = localStorage.getItem('token')
+        const userId = localStorage.getItem('user_id')
+        const res = await fetch(`http://localhost:3060/scores/${userId}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'auth': token
+            }
+        })
+        const data = await res.json()
+        userScoresTable.innerHTML = ''
+        if (data.length > 0) {
+            let index = 1
+            data.forEach(score => {
+                const li = document.createElement('li')
+                li.innerText = `${(index)} - ${score.score}`
+                index++
+                userScoresTable.appendChild(li)
+            })
+        } else {
+            throw new Error('No scores found')
+        }
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+function refreshScores() {
+    getHighScores()
+    getUserScores()
+}
+
+async function deleteScores() {
+    try {
+        const token = localStorage.getItem('token')
+        const userId = localStorage.getItem('user_id')
+        const res = await fetch(`http://localhost:3060/scores/${userId}`, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                'auth': token
+            }
+        })
+        const data = await res.json()
+        if (data.message === 'Scores Deleted') {
+            alertTitle.innerText = 'Success!'
+            alertText.innerText = 'Scores deleted successfully'
+            alertModal.classList.add('modal_show')
+            refreshScores()
+        } else {
+            throw new Error('Error, scores not deleted')
+        }
+    } catch (error) {
+        console.log(error.message)
+        alertTitle.innerText = 'Alert!'
+        alertText.innerText = error.message
+        alertModal.classList.add('modal_show')
+    }
+}
+
+deleteScoresBtn.addEventListener('click', () => deleteScores())
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Modal------------------------------------------------------------------------------------------------------------------------------
 const modal = document.querySelector(".modal_container")
@@ -192,11 +290,13 @@ restartGame.addEventListener("click", () => {
 saveScore.addEventListener("click", () => {
     closeModal()
     saveScoreToDB()
+    refreshScores()
 })
 
 async function saveScoreToDB() {
     try {
-        let token = localStorage.getItem('token')
+        const token = localStorage.getItem('token')
+        const user_id = localStorage.getItem('user_id')
         const res = await fetch('http://localhost:3060/scores', {
             method: "POST",
             headers: {
@@ -209,7 +309,6 @@ async function saveScoreToDB() {
             })
         })
         const data = await res.json()
-        console.log(data)
         if (data.message === 'Score Added') {
             alertTitle.innerText = 'Success!'
             alertText.innerText = 'Score saved successfully'
@@ -477,6 +576,7 @@ document.addEventListener("keydown", event => {
         gameStarted = false
     }
     if (gameStarted) {
+        if(restartBtn.disabled === true){ restartBtn.disabled = false }
         if (event.key === 'ArrowLeft' || event.key === 'a') {
             pieces[piece].position.x--
             if (checkCollision()) {
@@ -495,7 +595,6 @@ document.addEventListener("keydown", event => {
             }
         }
         if (event.key === ' ') {
-            console.log(gameStarted)
             for (let i = 0; i < 30; i++) {
                 pieces[piece].position.y++
                 if (checkCollision()) {
@@ -508,32 +607,41 @@ document.addEventListener("keydown", event => {
         if (event.key === 'ArrowUp' || event.key === 'w') {
             rotatePiece()
             if (checkCollision()) {
-                //NO ANDA------------------------------------------------------------------------------------------------------------------------------
                 for (let i = 0; i < 3; i++) {
                     pieces[piece].position.x++
                     if (checkCollision()) {
                         pieces[piece].position.x--
+                        if(piece === 0 && i < 2){
+                            pieces[piece].position.x--
+                        }
+                    } else {
+                        break
                     }
                 }
                 for (let i = 0; i < 3; i++) {
                     pieces[piece].position.x--
                     if (checkCollision()) {
                         pieces[piece].position.x++
+                    } else {
+                        break
                     }
                 }
                 for (let i = 0; i < 3; i++) {
                     pieces[piece].position.y++
                     if (checkCollision()) {
                         pieces[piece].position.y--
+                    } else {
+                        break
                     }
                 }
                 for (let i = 0; i < 3; i++) {
                     pieces[piece].position.y--
                     if (checkCollision()) {
                         pieces[piece].position.y++
+                    } else {
+                        break
                     }
                 }
-                rotatePiece()
             }
         }
     }

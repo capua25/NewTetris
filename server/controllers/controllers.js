@@ -33,7 +33,7 @@ const getHighScores = async (req, res) => {
         const highScores = await models.getHighScores()
         res.status(200).json(highScores)
     } catch (err) {
-        res.status(500).json({ message: "Something went wrong" })
+        res.status(500).json({ message: "Something went wrong", error: err.message })
     }
 }
 
@@ -42,7 +42,7 @@ const getUserHighScores = async (req, res) => {
         const highScores = await models.getUserHighScores(req.params.id)
         res.status(200).json(highScores)
     } catch (err) {
-        res.status(500).json({ message: "Something went wrong" })
+        res.status(500).json({ message: "Something went wrong", error: err.message })
     }
 }
 

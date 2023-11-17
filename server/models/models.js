@@ -41,7 +41,7 @@ const getHighScores = async () => {
     let conn;
     try {
         conn = await pool.getConnection()
-        const rows = await conn.query("SELECT * FROM scores")
+        const rows = await conn.query("SELECT users.username, scores.score FROM scores JOIN users ON users.id = scores.user_id ORDER BY score DESC LIMIT 10")
         return rows
     } catch (err) {
         throw err
@@ -54,7 +54,7 @@ const getUserHighScores = async (id) => {
     let conn;
     try {
         conn = await pool.getConnection()
-        const rows = await conn.query("SELECT * FROM scores WHERE user_id = ?", [id])
+        const rows = await conn.query("SELECT * FROM scores WHERE user_id = ? ORDER BY score DESC", [id])
         return rows
     } catch (err) {
         throw err
