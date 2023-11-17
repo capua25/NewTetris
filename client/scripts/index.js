@@ -67,6 +67,24 @@ async function serverLogin(username, password){
             localStorage.setItem('user', data.user.username)
             localStorage.setItem('user_id', data.user.id)
             localStorage.setItem('token', data.token)
+            startBtn.disabled = false
+            pauseBtn.disabled = true
+            restartBtn.disabled = true
+            gameStarted = false
+            playerLevel = 1
+            playerScore = 0
+            erasedLines = 0
+            nextLevel = 10
+            dropInterval = 1000
+            score.innerText = playerScore
+            level.innerText = playerLevel
+            lines.innerText = erasedLines
+            board.forEach((row) => {
+                row.fill(0)
+            })
+            nextPiece()
+            drawTable()
+            drawFuturePiece()
             loginModal.classList.remove('modal_show')
             refreshScores()
             userDiv.innerText = data.user.username
