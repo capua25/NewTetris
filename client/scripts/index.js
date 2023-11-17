@@ -68,7 +68,7 @@ async function serverLogin(username, password){
             userDiv.innerText = data.user.username
             gameDiv.classList.remove('hide')
         }else{
-            newUserButton.classList.remove('hide')
+            newUserButton.classList.remove('hide_btn')
             throw new Error('Invalid credentials, create new user?')
         }
     }catch(error){
@@ -86,10 +86,10 @@ async function serverSignup(username, password){
                 'Content-Type': 'application/json',
                 'mode': 'no-cors'
             },
-            body: {
+            body: JSON.stringify({
                 'username': username,
                 'password': password
-            }
+            })
         })
         const data = await res.json()
         if (data.message === 'User created'){
@@ -291,6 +291,7 @@ let lastTime = 0
 let gameStarted = false
 
 function updateTable(time = 0) {
+    console.log("gameStarted")
     if (gameStarted) {
         const deltaTime = time - lastTime
         lastTime = time

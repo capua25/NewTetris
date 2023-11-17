@@ -3,7 +3,7 @@ const database = require('mariadb')
 const pool = database.createPool({
     host:"localhost", 
     user:"root", 
-    password:"1234", 
+    password:"root", // root para casa, 1234 para trabajo
     database:"tetris"
 })
 
