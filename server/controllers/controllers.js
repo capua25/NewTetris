@@ -17,7 +17,6 @@ const login = async (req, res) => {
         const { username, password } = req.body
         const user = await models.login(username, password)
         if (user) {
-            console.log('entra al if')
             const token = jwt.sign({ id: user.id }, JWT_SECRET)
             res.status(200).json({ token, user })
         } else {

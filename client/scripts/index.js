@@ -51,8 +51,7 @@ async function serverLogin(username, password){
         const res = await fetch('http://localhost:3060/login', {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                'mode': 'no-cors'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 'username': username,
@@ -61,6 +60,9 @@ async function serverLogin(username, password){
         })
         const data = await res.json()
         if (data.token){
+            localStorage.removeItem('user')
+            localStorage.removeItem('user_id')
+            localStorage.removeItem('token')
             localStorage.setItem('user', data.user.username)
             localStorage.setItem('user_id', data.user.id)
             localStorage.setItem('token', data.token)
@@ -72,7 +74,7 @@ async function serverLogin(username, password){
             throw new Error('Invalid credentials, create new user?')
         }
     }catch(error){
-        //console.log(error)
+        console.log(error)
         alertTitle.innerText = 'Alert!'
         alertText.innerText = error.message
         alertModal.classList.add('modal_show')
@@ -83,8 +85,7 @@ async function serverSignup(username, password){
         const res = await fetch('http://localhost:3060/signup', {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                'mode': 'no-cors'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 'username': username,
@@ -112,7 +113,7 @@ newUserButton.addEventListener('click', () => {
     serverSignup(document.getElementById('username').value, document.getElementById('password').value)
 })
 
-if (!user || !token) {
+if (user === null || token === null || user_id === null) {
     gameDiv.classList.add('hide')
     localStorage.removeItem('user')
     localStorage.removeItem('user_id')
@@ -189,8 +190,47 @@ restartGame.addEventListener("click", () => {
 })
 
 saveScore.addEventListener("click", () => {
-
+    closeModal()
+    saveScoreToDB()
 })
+
+async function saveScoreToDB() {
+    try {
+        let token = localStorage.getItem('token')
+        const res = await fetch('http://localhost:3060/scores', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'auth': token
+            },
+            body: JSON.stringify({
+                'user_id': user_id,
+                'score': playerScore
+            })
+        })
+        const data = await res.json()
+        console.log(data)
+        if (data.message === 'Score Added') {
+            alertTitle.innerText = 'Success!'
+            alertText.innerText = 'Score saved successfully'
+            alertModal.classList.add('modal_show')
+        } else {
+            if (token === null) {
+                gameDiv.classList.add('hide')
+                localStorage.removeItem('user')
+                localStorage.removeItem('user_id')
+                localStorage.removeItem('token')
+                loginModal.classList.add('modal_show')
+            }
+            throw new Error('Error, score not saved')
+        }
+    } catch (error) {
+        console.log(error.message)
+        alertTitle.innerText = 'Alert!'
+        alertText.innerText = error.message
+        alertModal.classList.add('modal_show')
+    }
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Tetris------------------------------------------------------------------------------------------------------------------------------
 let canva = document.getElementById("tetris")
@@ -291,7 +331,6 @@ let lastTime = 0
 let gameStarted = false
 
 function updateTable(time = 0) {
-    console.log("gameStarted")
     if (gameStarted) {
         const deltaTime = time - lastTime
         lastTime = time
