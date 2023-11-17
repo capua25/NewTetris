@@ -22,12 +22,12 @@ USE `tetris`;
 -- Volcando estructura para tabla tetris.scores
 CREATE TABLE IF NOT EXISTS `scores` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '',
+  `user_id` int(11) NOT NULL,
   `score` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_scores_users` (`user_id`),
-  CONSTRAINT `FK_scores_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`username`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `FK_scores_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 
 -- La exportación de datos fue deseleccionada.
 

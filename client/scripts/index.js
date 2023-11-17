@@ -12,6 +12,7 @@ const newUserButton = document.querySelector('#create_user')
 const gameDiv = document.querySelector('.border_div')
 const userDiv = document.querySelector('#user')
 const form = document.querySelector('form')
+const logOutBtn = document.querySelector('#logOut')
 
 alertButton.addEventListener('click', () => {
     alertModal.classList.remove('modal_show')
@@ -94,12 +95,13 @@ async function serverSignup(username, password){
             })
         })
         const data = await res.json()
-        if (data.message === 'User created'){
-            newUserButton.classList.add('hide')
+        if (data.message === 'User Created'){
+            newUserButton.classList.add('hide_btn')
+            alertModal.classList.remove('modal_show')
             serverLogin(username, password)
         }else{
-            newUserButton.classList.remove('hide')
-            throw new Error('Error, username must be unique')
+            newUserButton.classList.add('hide_btn')
+            throw new Error('Error, user already exists')
         }
     }catch(error){
         console.log(error)
@@ -110,8 +112,16 @@ async function serverSignup(username, password){
 }
 
 newUserButton.addEventListener('click', () => {
-    newUserButton.classList.add('hide')
+    newUserButton.classList.add('hide_btn')
     serverSignup(document.getElementById('username').value, document.getElementById('password').value)
+})
+
+logOutBtn.addEventListener('click', () => {
+    gameDiv.classList.add('hide')
+    localStorage.removeItem('user')
+    localStorage.removeItem('user_id')
+    localStorage.removeItem('token')
+    loginModal.classList.add('modal_show')
 })
 
 if (user === null || token === null || user_id === null) {
@@ -189,8 +199,8 @@ async function getHighScores() {
             }
         })
         const data = await res.json()
+        highScoresTable.innerHTML = ''
         if (data.length > 0) {
-            highScoresTable.innerHTML = ''
             data.forEach(score => {
                 const li = document.createElement('li')
                 li.innerText = `${score.username}- ${score.score}`
@@ -236,6 +246,45 @@ async function getUserScores() {
 function refreshScores() {
     getHighScores()
     getUserScores()
+}
+
+async function saveScoreToDB() {
+    try {
+        const token = localStorage.getItem('token')
+        const user_id = localStorage.getItem('user_id')
+        const res = await fetch('http://localhost:3060/scores', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'auth': token
+            },
+            body: JSON.stringify({
+                'user_id': user_id,
+                'score': playerScore
+            })
+        })
+        const data = await res.json()
+        console.log(data)
+        if (data.message === 'Score Added') {
+            alertTitle.innerText = 'Success!'
+            alertText.innerText = 'Score saved successfully'
+            alertModal.classList.add('modal_show')
+        } else {
+            if (token === null) {
+                gameDiv.classList.add('hide')
+                localStorage.removeItem('user')
+                localStorage.removeItem('user_id')
+                localStorage.removeItem('token')
+                loginModal.classList.add('modal_show')
+            }
+            throw new Error('Error, score not saved')
+        }
+    } catch (error) {
+        console.log(error.message)
+        alertTitle.innerText = 'Alert!'
+        alertText.innerText = error.message
+        alertModal.classList.add('modal_show')
+    }
 }
 
 async function deleteScores() {
@@ -292,44 +341,6 @@ saveScore.addEventListener("click", () => {
     saveScoreToDB()
     refreshScores()
 })
-
-async function saveScoreToDB() {
-    try {
-        const token = localStorage.getItem('token')
-        const user_id = localStorage.getItem('user_id')
-        const res = await fetch('http://localhost:3060/scores', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'auth': token
-            },
-            body: JSON.stringify({
-                'user_id': user_id,
-                'score': playerScore
-            })
-        })
-        const data = await res.json()
-        if (data.message === 'Score Added') {
-            alertTitle.innerText = 'Success!'
-            alertText.innerText = 'Score saved successfully'
-            alertModal.classList.add('modal_show')
-        } else {
-            if (token === null) {
-                gameDiv.classList.add('hide')
-                localStorage.removeItem('user')
-                localStorage.removeItem('user_id')
-                localStorage.removeItem('token')
-                loginModal.classList.add('modal_show')
-            }
-            throw new Error('Error, score not saved')
-        }
-    } catch (error) {
-        console.log(error.message)
-        alertTitle.innerText = 'Alert!'
-        alertText.innerText = error.message
-        alertModal.classList.add('modal_show')
-    }
-}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Tetris------------------------------------------------------------------------------------------------------------------------------
 let canva = document.getElementById("tetris")

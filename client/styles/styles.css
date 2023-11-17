@@ -20,6 +20,7 @@ body{
     justify-content: center;
     align-items: center;
     background-image: url(../resources/background.jpg);
+    background-size: cover;
     font-family: Tetris;
 }
 
@@ -96,6 +97,10 @@ button{
     font-size: 9px;
 }
 #delete-scores:hover{
+    background-color: rgba(255, 0, 0, 0.7);
+}
+
+#logOut:hover{
     background-color: rgba(255, 0, 0, 0.7);
 }
 
