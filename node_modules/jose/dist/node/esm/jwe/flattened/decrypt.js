@@ -15,14 +15,14 @@ export async function flattenedDecrypt(jwe, key, options) {
     if (jwe.protected === undefined && jwe.header === undefined && jwe.unprotected === undefined) {
         throw new JWEInvalid('JOSE Header missing');
     }
-    if (typeof jwe.iv !== 'string') {
-        throw new JWEInvalid('JWE Initialization Vector missing or incorrect type');
+    if (jwe.iv !== undefined && typeof jwe.iv !== 'string') {
+        throw new JWEInvalid('JWE Initialization Vector incorrect type');
     }
     if (typeof jwe.ciphertext !== 'string') {
         throw new JWEInvalid('JWE Ciphertext missing or incorrect type');
     }
-    if (typeof jwe.tag !== 'string') {
-        throw new JWEInvalid('JWE Authentication Tag missing or incorrect type');
+    if (jwe.tag !== undefined && typeof jwe.tag !== 'string') {
+        throw new JWEInvalid('JWE Authentication Tag incorrect type');
     }
     if (jwe.protected !== undefined && typeof jwe.protected !== 'string') {
         throw new JWEInvalid('JWE Protected Header incorrect type');
@@ -104,17 +104,21 @@ export async function flattenedDecrypt(jwe, key, options) {
     }
     let iv;
     let tag;
-    try {
-        iv = base64url(jwe.iv);
+    if (jwe.iv !== undefined) {
+        try {
+            iv = base64url(jwe.iv);
+        }
+        catch {
+            throw new JWEInvalid('Failed to base64url decode the iv');
+        }
     }
-    catch {
-        throw new JWEInvalid('Failed to base64url decode the iv');
-    }
-    try {
-        tag = base64url(jwe.tag);
-    }
-    catch {
-        throw new JWEInvalid('Failed to base64url decode the tag');
+    if (jwe.tag !== undefined) {
+        try {
+            tag = base64url(jwe.tag);
+        }
+        catch {
+            throw new JWEInvalid('Failed to base64url decode the tag');
+        }
     }
     const protectedHeader = encoder.encode(jwe.protected ?? '');
     let additionalData;
@@ -131,7 +135,7 @@ export async function flattenedDecrypt(jwe, key, options) {
     catch {
         throw new JWEInvalid('Failed to base64url decode the ciphertext');
     }
-    let plaintext = await decrypt(enc, cek, ciphertext, iv, tag, additionalData);
+    const plaintext = await decrypt(enc, cek, ciphertext, iv, tag, additionalData);
     const result = { plaintext };
     if (jwe.protected !== undefined) {
         result.protectedHeader = parsedProt;
