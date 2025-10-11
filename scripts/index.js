@@ -49,7 +49,7 @@ form.addEventListener('submit', event => {
 
 async function serverLogin(username, password){
     try{
-        const res = await fetch('http://localhost:3060/login', {
+        const res = await fetch('http://localhost:4070/login', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -102,7 +102,7 @@ async function serverLogin(username, password){
 }
 async function serverSignup(username, password){
     try{
-        const res = await fetch('http://localhost:3060/signup', {
+        const res = await fetch('http://localhost:4070/signup', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -209,7 +209,7 @@ const deleteScoresBtn = document.querySelector('#delete-scores')
 async function getHighScores() {
     try {
         const token = localStorage.getItem('token')
-        const res = await fetch('http://localhost:3060/scores', {
+        const res = await fetch('http://localhost:4070/scores', {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -236,7 +236,7 @@ async function getUserScores() {
     try {
         const token = localStorage.getItem('token')
         const userId = localStorage.getItem('user_id')
-        const res = await fetch(`http://localhost:3060/scores/${userId}`, {
+        const res = await fetch(`http://localhost:4070/scores/${userId}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -270,7 +270,7 @@ async function saveScoreToDB() {
     try {
         const token = localStorage.getItem('token')
         const user_id = localStorage.getItem('user_id')
-        const res = await fetch('http://localhost:3060/scores', {
+        const res = await fetch('http://localhost:4070/scores', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -309,7 +309,7 @@ async function deleteScores() {
     try {
         const token = localStorage.getItem('token')
         const userId = localStorage.getItem('user_id')
-        const res = await fetch(`http://localhost:3060/scores/${userId}`, {
+        const res = await fetch(`http://localhost:4070/scores/${userId}`, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json',

@@ -4,7 +4,7 @@ const scores = require('./routes/scores.js')
 const CORS = require('cors')
 
 const app = express()
-const port = 3060
+const port = 4070
 
 app.use(CORS())
 app.use(express.json())
